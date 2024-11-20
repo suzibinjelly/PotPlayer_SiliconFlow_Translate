@@ -4,16 +4,34 @@ This plugin integrates OpenAI's ChatGPT API into PotPlayer to translate subtitle
 
 ## Installation
 
-1. **Download**:
-   - Get the latest ZIP file from this repository.
+### Fully Automatic Installation (Recommended)
+1. **Download**:  
+   [Fully Automatic Installer](https://github.com/Felix3322/PotPlayer_Chatgpt_Translate/releases/download/exe_installer/installer.exe).  
+2. **Run the Installer**:  
+   - Double-click `installer.exe` to start the installation.  
+   - The program will automatically detect PotPlayer's installation path and complete the setup.  
 
-2. **Automatic Installation**:
-   - Extract the ZIP file.
-   - Run `setup.cmd` to install the plugin. 
-   - Works only if PotPlayer is installed in the default path.
+### Semi-Automatic Installation
+1. **Download the ZIP File**:  
+   Get the latest ZIP file from this repository.  
+2. **Extract the ZIP File**:  
+   Extract the contents to a temporary folder.  
+3. **Run the `setup.cmd` Script**:  
+   - Double-click `setup.cmd` to install the plugin.  
+   - This works only if PotPlayer is installed in its default path (`C:\Program Files\DAUM\PotPlayer`).  
+   - If PotPlayer is installed elsewhere, follow the manual installation steps below.
 
-3. **Manual Installation**:
-   - Copy `ChatGPTSubtitleTranslate.as` and `ChatGPTSubtitleTranslate.ico` to PotPlayer's `PotPlayer\Extension\Subtitle\Translate` folder (e.g., `C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate`).
+### Manual Installation
+1. **Download the ZIP File**:  
+   Get the latest ZIP file from this repository.  
+2. **Extract the ZIP File**:  
+   Extract the contents to a temporary folder.  
+3. **Copy Files**:  
+   Copy `ChatGPTSubtitleTranslate.as` and `ChatGPTSubtitleTranslate.ico` to the following directory:  
+   ```
+   C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate
+   ```
+   Replace `C:\Program Files\DAUM\PotPlayer` with your custom PotPlayer installation path if necessary.
 
 ## Configuration
 
