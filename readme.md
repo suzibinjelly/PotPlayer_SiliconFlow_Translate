@@ -13,7 +13,7 @@ This plugin integrates OpenAI's ChatGPT API into PotPlayer to translate subtitle
    - Works only if PotPlayer is installed in the default path.
 
 3. **Manual Installation**:
-   - Copy `ChatGPTSubtitleTranslate.as` and `ChatGPTSubtitleTranslate.ico` to PotPlayer's `Scripts` folder (e.g., `C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate`).
+   - Copy `ChatGPTSubtitleTranslate.as` and `ChatGPTSubtitleTranslate.ico` to PotPlayer's `PotPlayer\Extension\Subtitle\Translate` folder (e.g., `C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate`).
 
 ## Configuration
 
