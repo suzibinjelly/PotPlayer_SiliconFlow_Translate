@@ -84,8 +84,4 @@ This level of contextual understanding sets ChatGPT apart from traditional trans
 
 ## License
 
-This project is licensed under the MIT License.
-
----
-
-**Pro Tip**: Try ChatGPT with subtitles containing idioms or pop culture references to see the significant improvement over traditional translation tools.
+This project is licensed under the MIT Licence.
