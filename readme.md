@@ -48,9 +48,9 @@ ChatGPT ensures superior subtitle translation by considering context, idioms, an
 
 - Input: *"You're gonna old yeller my f**king universe."*  
   - **Google Translate**: *"你要老了我他妈的宇宙吗?"* (nonsensical).
-  - ![](https://github.com/Felix3322/PotPlayer_Chatgpt_Translate/blob/master/readme_res/Google%20translate.png)
+  ![](https://github.com/Felix3322/PotPlayer_Chatgpt_Translate/blob/master/readme_res/Google%20translate.png)
   - **ChatGPT**: *"你要像《老黄犬》一样对待我的宇宙?"* (accurately referencing the movie *Old Yeller*, capturing the intended meaning).  
-  - ![](https://github.com/Felix3322/PotPlayer_Chatgpt_Translate/blob/master/readme_res/Chatgpt.png)
+  ![](https://github.com/Felix3322/PotPlayer_Chatgpt_Translate/blob/master/readme_res/Chatgpt.png)
 
 This level of contextual understanding sets ChatGPT apart from traditional translation tools.
 
