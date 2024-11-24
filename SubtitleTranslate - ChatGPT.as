@@ -132,7 +132,7 @@ string Translate(string Text, string &in SrcLang, string &in DstLang) {
 
     // 构建请求
     string apiUrl = "https://api.openai.com/v1/chat/completions";
-    string prompt = "Translate the following text";
+    string prompt = "Translate the following subtitle text. You should only output the translation of the subtitle, not the explanation or other content.";
     if (!SrcLang.empty()) {
         prompt += " from " + SrcLang;
     }
