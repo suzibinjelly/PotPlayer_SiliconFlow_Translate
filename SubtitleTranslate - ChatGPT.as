@@ -39,7 +39,7 @@ string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)";
 // 支持的语言列表
 array<string> LangTable = 
 {
-    "{$CP949=자동 감지$}{$CP950=自動檢測$}{$CP0=Auto Detect$}", "af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca",
+    "{$CP0=Auto Detect$}", "af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca",
     "ceb", "ny", "zh-CN",
     "zh-TW", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "tl", "fi", "fr",
     "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km",
