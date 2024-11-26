@@ -35,6 +35,7 @@ string GetPasswordText() {
 string api_key = "";
 string selected_model = "gpt-4o-mini"; // Default model
 string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)";
+string apiUrl = "https://api.openai.com/v1/chat/completions"; // Added apiUrl definition
 
 // Supported Language List
 array<string> LangTable =
@@ -71,7 +72,7 @@ string ServerLogin(string User, string Pass) {
     // Validate model name
     if (selected_model.empty()) {
         HostPrintUTF8("{$CP0=Model name not entered. Please enter a valid model name.$}\n");
-        selected_model = "gpt-4o-mini"; // Default to gpt-3.5-turbo
+        selected_model = "gpt-4o-mini"; // Default to gpt-4o-mini
     }
 
     // Validate API Key
@@ -115,7 +116,7 @@ string UNICODE_RLE = "\u202B"; // For Right-to-Left languages
 // Function to estimate token count based on character length
 int EstimateTokenCount(const string &in text) {
     // Rough estimation: average 4 characters per token
-    return int(text.length() / 4);
+    return int(float(text.length()) / 4); // Fixed division error by casting to float
 }
 
 // Function to get the model's maximum context length
@@ -176,7 +177,7 @@ string Translate(string Text, string &in SrcLang, string &in DstLang) {
     }
 
     // Limit the size of subtitleHistory to prevent it from growing indefinitely
-    if (subtitleHistory.length() > 100) {
+    if (subtitleHistory.length() > 1000) { // Increased limit for context
         subtitleHistory.removeAt(0);
     }
 
@@ -195,7 +196,7 @@ string Translate(string Text, string &in SrcLang, string &in DstLang) {
     string escapedPrompt = JsonEscape(prompt);
 
     // Request data
-    string requestData = "{\"model\":\"" + selected_model + "\",\"messages\":[{\"role\":\"user\",\"content\":\"" + escapedPrompt + "\"}],\"max_tokens\":" + (maxTokens - tokenCount).ToString() + ",\"temperature\":0}";
+    string requestData = "{\"model\":\"" + selected_model + "\",\"messages\":[{\"role\":\"user\",\"content\":\"" + escapedPrompt + "\"}],\"max_tokens\":1000,\"temperature\":0}";
 
     string headers = "Authorization: Bearer " + api_key + "\nContent-Type: application/json";
 
