@@ -1,10 +1,14 @@
+/*
+    Real-time subtitle translation for PotPlayer using OpenAI ChatGPT API
+*/
+
 // Plugin Information Functions
 string GetTitle() {
     return "{$CP949=ChatGPT 번역$}{$CP950=ChatGPT 翻譯$}{$CP0=ChatGPT Translate$}";
 }
 
 string GetVersion() {
-    return "2.1";
+    return "2.0";
 }
 
 string GetDesc() {
@@ -31,49 +35,52 @@ string GetPasswordText() {
 string api_key = "";
 string selected_model = "gpt-4o-mini"; // Default model
 string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)";
-string apiUrl = "https://api.openai.com/v1/chat/completions";
 
-// Supported Language List (Unchanged)
-array<string> LangTable = {
+// Supported Language List
+array<string> LangTable =
+{
     "{$CP0=Auto Detect$}", "af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca",
-    "ceb", "ny", "zh-CN", "zh-TW", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "tl", "fi", "fr",
-    "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "hi", "hmn", "hu", "is", "ig", "id",
-    "ga", "it", "ja", "jw", "kn", "kk", "km", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb", "mk",
-    "ms", "mg", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ps", "fa", "pl", "pt", "pa", "ro",
-    "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tg",
-    "ta", "te", "th", "tr", "uk", "ur", "uz", "vi", "cy", "xh", "yi", "yo", "zu"
+    "ceb", "ny", "zh-CN",
+    "zh-TW", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "tl", "fi", "fr",
+    "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km",
+    "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb", "mk", "ms", "mg", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ps", "fa", "pl", "pt",
+    "pa", "ro", "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tg", "ta", "te", "th", "tr", "uk",
+    "ur", "uz", "vi", "cy", "xh", "yi", "yo", "zu"
 };
 
-// Get Source and Destination Language Lists
+// Get Source Language List
 array<string> GetSrcLangs() {
-    return LangTable;
+    array<string> ret = LangTable;
+    return ret;
 }
 
+// Get Destination Language List
 array<string> GetDstLangs() {
-    return LangTable;
+    array<string> ret = LangTable;
+    return ret;
 }
 
-// Login Interface
+// Login Interface for entering model name and API Key
 string ServerLogin(string User, string Pass) {
-    selected_model = User.Trim().ToLower();
+    // Trim whitespace
+    selected_model = User.Trim();
     api_key = Pass.Trim();
 
-    if (selected_model.empty()) {
-        HostPrintUTF8("{$CP0=Model name not entered. Please enter a valid model name.$}\n");
-        selected_model = "gpt-4o-mini";
-    }
+    selected_model.MakeLower();
 
     // Validate model name
-    if (selected_model != "gpt-4-turbo" && selected_model != "gpt-4o" && selected_model != "gpt-4o-mini") {
-        HostPrintUTF8("{$CP0=Invalid model name. Available models are: gpt-4-turbo, gpt-4o, gpt-4o-mini.$}\n");
-        return "fail";
+    if (selected_model.empty()) {
+        HostPrintUTF8("{$CP0=Model name not entered. Please enter a valid model name.$}\n");
+        selected_model = "gpt-4o-mini"; // Default to gpt-3.5-turbo
     }
 
+    // Validate API Key
     if (api_key.empty()) {
         HostPrintUTF8("{$CP0=API Key not configured. Please enter a valid API Key.$}\n");
         return "fail";
     }
 
+    // Save settings to temporary storage
     HostSaveString("api_key", api_key);
     HostSaveString("selected_model", selected_model);
 
@@ -81,7 +88,7 @@ string ServerLogin(string User, string Pass) {
     return "200 ok";
 }
 
-// Logout Interface
+// Logout Interface to clear model name and API Key
 void ServerLogout() {
     api_key = "";
     selected_model = "gpt-4o-mini";
@@ -101,8 +108,9 @@ string JsonEscape(const string &in input) {
     return output;
 }
 
-// For Right-to-Left languages
-string UNICODE_RLE = "\u202B";
+// Global variables for storing previous subtitles
+array<string> subtitleHistory;
+string UNICODE_RLE = "\u202B"; // For Right-to-Left languages
 
 // Function to estimate token count based on character length
 int EstimateTokenCount(const string &in text) {
@@ -112,12 +120,24 @@ int EstimateTokenCount(const string &in text) {
 
 // Function to get the model's maximum context length
 int GetModelMaxTokens(const string &in modelName) {
-    // All models have 128k context length
-    return 128000;
+    // Define maximum tokens for known models
+    if (modelName == "gpt-3.5-turbo") {
+        return 4096;
+    } else if (modelName == "gpt-3.5-turbo-16k") {
+        return 16384;
+    } else if (modelName == "gpt-4o") {
+        return 128000;
+    } else if (modelName == "gpt-4o-mini") {
+        return 128000;
+    } else {
+        // Default to a conservative limit
+        return 4096;
+    }
 }
 
 // Translation Function
 string Translate(string Text, string &in SrcLang, string &in DstLang) {
+    // Load API key and model name from temporary storage
     api_key = HostLoadString("api_key", "");
     selected_model = HostLoadString("selected_model", "gpt-4o-mini");
 
@@ -135,19 +155,47 @@ string Translate(string Text, string &in SrcLang, string &in DstLang) {
         SrcLang = "";
     }
 
+    // Add the current subtitle to the history
+    subtitleHistory.insertLast(Text);
+
+    // Get the model's maximum token limit
+    int maxTokens = GetModelMaxTokens(selected_model);
+
+    // Build the context from the subtitle history
+    string context = "";
+    int tokenCount = EstimateTokenCount(Text); // Tokens used by the current subtitle
+    int i = int(subtitleHistory.length()) - 2; // Start from the previous subtitle
+    while (i >= 0 && tokenCount < (maxTokens - 1000)) { // Reserve tokens for response and prompt
+        string subtitle = subtitleHistory[i];
+        int subtitleTokens = EstimateTokenCount(subtitle);
+        tokenCount += subtitleTokens;
+        if (tokenCount < (maxTokens - 1000)) {
+            context = subtitle + "\n" + context;
+        }
+        i--;
+    }
+
+    // Limit the size of subtitleHistory to prevent it from growing indefinitely
+    if (subtitleHistory.length() > 100) {
+        subtitleHistory.removeAt(0);
+    }
+
     // Construct the prompt
     string prompt = "You are a professional translator. Please translate the following subtitle";
     if (!SrcLang.empty()) {
         prompt += " from " + SrcLang;
     }
-    prompt += " to " + DstLang + ".\n";
+    prompt += " to " + DstLang + ". Use the context provided to maintain coherence.\n";
+    if (!context.empty()) {
+        prompt += "Context:\n" + context + "\n";
+    }
     prompt += "Subtitle to translate:\n" + Text;
 
     // JSON escape
     string escapedPrompt = JsonEscape(prompt);
 
     // Request data
-    string requestData = "{\"model\":\"" + selected_model + "\",\"messages\":[{\"role\":\"user\",\"content\":\"" + escapedPrompt + "\"}],\"max_tokens\":1000,\"temperature\":0}";
+    string requestData = "{\"model\":\"" + selected_model + "\",\"messages\":[{\"role\":\"user\",\"content\":\"" + escapedPrompt + "\"}],\"max_tokens\":" + (maxTokens - tokenCount).ToString() + ",\"temperature\":0}";
 
     string headers = "Authorization: Bearer " + api_key + "\nContent-Type: application/json";
 
