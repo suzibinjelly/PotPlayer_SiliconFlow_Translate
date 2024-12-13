@@ -4,6 +4,11 @@ This plugin integrates OpenAI's ChatGPT API into PotPlayer for accurate and cont
 
 ---
 
+(简体中文)[https://github.com/Felix3322/PotPlayer_Chatgpt_Translate/blob/master/readme_res/readme_zh.md]
+(English)[https://github.com/Felix3322/PotPlayer_Chatgpt_Translate/blob/master/readme.md]
+
+---
+
 ## Installation
 
 ### Fully Automatic Installation (Recommended)
