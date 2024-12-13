@@ -1,4 +1,6 @@
-这是《ChatGPT 字幕翻译插件 for PotPlayer》的中文版本说明文档。
+# PotPlayer 的 ChatGPT 字幕翻译插件
+
+该插件将 OpenAI 的 ChatGPT API 集成到 PotPlayer 中，以实现准确且上下文感知的字幕翻译。与传统翻译工具不同，ChatGPT 会考虑上下文、习语和文化细微差别，使其成为翻译字幕的理想解决方案。
 
 ---
 
