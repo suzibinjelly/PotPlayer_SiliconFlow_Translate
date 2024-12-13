@@ -182,7 +182,7 @@ string Translate(string Text, string &in SrcLang, string &in DstLang) {
     }
 
     // Construct the prompt
-    string prompt = "You are a professional translator. Please translate the following subtitle";
+    string prompt = "You are a professional translator. Please translate the following subtitle, output only translated results";
     if (!SrcLang.empty()) {
         prompt += " from " + SrcLang;
     }
