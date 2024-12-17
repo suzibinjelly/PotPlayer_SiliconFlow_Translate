@@ -67,7 +67,7 @@ string ServerLogin(string User, string Pass) {
     selected_model = User.Trim();
     api_key = Pass.Trim();
 
-    selected_model.MakeLower();
+    // selected_model.MakeLower();
 
     // Validate model name
     if (selected_model.empty()) {
