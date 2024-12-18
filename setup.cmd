@@ -12,8 +12,8 @@ if "%lang%"=="zh" (
     set msg_exit=Press any key to exit...
 )
 echo %msg_copying%
-copy /Y "SubtitleTranslate - ChatGPT.as" "C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate"
-copy /Y "SubtitleTranslate - ChatGPT.ico" "C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate"
+copy /Y "SubtitleTranslate - SiliconFlow.as" "C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate"
+copy /Y "SubtitleTranslate - SiliconFlow.ico" "C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate"
 echo %msg_done%
 echo.
 echo %msg_exit%
